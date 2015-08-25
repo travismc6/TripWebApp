@@ -32,6 +32,8 @@
                 mapOptions);
         }
 
+
+
         var json = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.DataPoints));
 
             for (var i = 0, length = json.length; i < length; i++) {
