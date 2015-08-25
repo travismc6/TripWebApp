@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2f94d7c5dc0348e69ea419f0698877f7" Name="Diagram1">
+        <EntityTypeShape EntityType="TripAppModel.C__MigrationHistory" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="TripAppModel.ActivityVote" Width="1.5" PointX="5.25" PointY="2.375" />
+        <EntityTypeShape EntityType="TripAppModel.PushRegistration" Width="1.5" PointX="5.25" PointY="5.375" />
+        <EntityTypeShape EntityType="TripAppModel.TripActivity" Width="1.5" PointX="3" PointY="1.5" />
+        <EntityTypeShape EntityType="TripAppModel.TripComment" Width="1.5" PointX="5.25" PointY="11.375" />
+        <EntityTypeShape EntityType="TripAppModel.TripPicture" Width="1.5" PointX="5.25" PointY="7.875" />
+        <EntityTypeShape EntityType="TripAppModel.Trip" Width="1.5" PointX="0.75" PointY="6" />
+        <EntityTypeShape EntityType="TripAppModel.TripUser" Width="1.5" PointX="3" PointY="7.625" />
+        <AssociationConnector Association="TripAppModel.FK_dbo_ActivityVotes_dbo_TripActivities_TripActivityId" />
+        <AssociationConnector Association="TripAppModel.FK_dbo_ActivityVotes_dbo_TripUsers_TripUserId" />
+        <AssociationConnector Association="TripAppModel.FK_dbo_PushRegistrations_dbo_TripUsers_TripUserId" />
+        <AssociationConnector Association="TripAppModel.FK_dbo_TripActivities_dbo_Trips_TripId" />
+        <AssociationConnector Association="TripAppModel.FK_dbo_TripComments_dbo_TripUsers_TripUserId" />
+        <AssociationConnector Association="TripAppModel.FK_dbo_TripPictures_dbo_TripUsers_TripUserId" />
+        <AssociationConnector Association="TripAppModel.FK_dbo_TripUsers_dbo_Trips_TripId" />
+        <AssociationConnector Association="TripAppModel.FK_dbo_TripComments_dbo_Trips_Trip_Id" />
+        <AssociationConnector Association="TripAppModel.FK_dbo_TripPictures_dbo_Trips_Trip_Id" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

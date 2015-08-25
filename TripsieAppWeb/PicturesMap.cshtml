@@ -1,0 +1,77 @@
+﻿@Model List<TripsieAppWeb.TripPicture>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+     @Html.Raw(Json.Encode(@Model))
+
+
+    <meta name="viewport" content="width=device-width" />
+    <title>Pictures</title>
+
+    <style type="text/css">
+        html, body, #map-canvas {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdxOy8F92N6zKEapMKOK5sbBF5XTbxhY8">
+    </script>
+    <script type="text/javascript">
+        function initialize() {
+            var mapOptions = {
+                center: { lat: 41.8369, lng: -87.6847 },
+                zoom: 8
+            };
+            var map = new google.maps.Map(document.getElementById('map-canvas'),
+                mapOptions);
+        }
+
+        var json = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.DataPoints));
+
+            for (var i = 0, length = json.length; i < length; i++) {
+                var data = json[i],
+                    latLng = new google.maps.LatLng(data.lat, data.lng);
+
+                // Creating a marker and putting it on the map
+                var marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map,
+                    title: data.title
+                });
+
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+
+
+</head>
+<body>
+
+    @Html.Hidden("TripUserId", (string)ViewBag.UserId)
+
+    <p>
+        <div>
+            @Html.ActionLink("Trip Home", "Detail", "Trip", new { @id = @ViewBag.UserId }, new { style = "margin-right:10px" })
+            @Html.ActionLink("Activities", "Activities", "Trip", new { @id = @ViewBag.UserId }, new { style = "margin-right:10px" })
+            @Html.ActionLink("Comments", "Comments", "Trip", new { @id = @ViewBag.UserId }, new { style = "margin-right:10px" })
+            @Html.ActionLink("Pictures", "Pictures", "Trip", new { @id = @ViewBag.UserId }, new { style = "margin-right:10px" })
+        </div>
+    </p>
+
+   
+    <div id="map-canvas" style="height:500px; margin-top:20px"></div>
+
+
+
+
+
+
+</body>
+</html>

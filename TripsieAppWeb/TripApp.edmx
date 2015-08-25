@@ -1,0 +1,613 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TripAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ActivityVotes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TripUserId" Type="int" Nullable="false" />
+          <Property Name="Vote" Type="int" Nullable="false" />
+          <Property Name="TripActivityId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PushRegistrations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RegistrationId" Type="nvarchar(max)" />
+          <Property Name="TripUserId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TripActivities">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Activity" Type="nvarchar(max)" />
+          <Property Name="Details" Type="nvarchar(max)" />
+          <Property Name="TripId" Type="int" Nullable="false" />
+          <Property Name="TripUserId" Type="int" Nullable="false" />
+          <Property Name="Lat" Type="bigint" Nullable="false" />
+          <Property Name="Lon" Type="bigint" Nullable="false" />
+          <Property Name="IsComplete" Type="bit" Nullable="false" />
+          <Property Name="Location" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="TripComments">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="TripUserId" Type="int" Nullable="false" />
+          <Property Name="Comment" Type="nvarchar(max)" />
+          <Property Name="DetailId" Type="int" Nullable="false" />
+          <Property Name="TripActivityId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TripPictures">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="TripUserId" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Lat" Type="float" Nullable="false" />
+          <Property Name="Lon" Type="float" Nullable="false" />
+          <Property Name="PictureUrl" Type="nvarchar(max)" />
+          <Property Name="LocationName" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Trips">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StartDate" Type="nvarchar(max)" />
+          <Property Name="EndDate" Type="nvarchar(max)" />
+          <Property Name="Code" Type="nvarchar(max)" />
+          <Property Name="Destination" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="MyName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UserJson" Type="nvarchar(max)" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TripUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TripId" Type="int" />
+          <Property Name="DisplayName" Type="nvarchar(max)" />
+          <Property Name="Email" Type="nvarchar(max)" />
+          <Property Name="Phone" Type="nvarchar(max)" />
+          <Property Name="IsCreator" Type="bit" Nullable="false" />
+          <Property Name="TripCode" Type="nvarchar(max)" />
+          <Property Name="TripStatus" Type="int" Nullable="false" />
+          <Property Name="Lat" Type="float" Nullable="false" />
+          <Property Name="Lon" Type="float" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_dbo_ActivityVotes_dbo_TripActivities_TripActivityId">
+          <End Role="TripActivities" Type="Self.TripActivities" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ActivityVotes" Type="Self.ActivityVotes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TripActivities">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ActivityVotes">
+              <PropertyRef Name="TripActivityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_ActivityVotes_dbo_TripUsers_TripUserId">
+          <End Role="TripUsers" Type="Self.TripUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ActivityVotes" Type="Self.ActivityVotes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TripUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ActivityVotes">
+              <PropertyRef Name="TripUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_PushRegistrations_dbo_TripUsers_TripUserId">
+          <End Role="TripUsers" Type="Self.TripUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PushRegistrations" Type="Self.PushRegistrations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TripUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PushRegistrations">
+              <PropertyRef Name="TripUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_TripActivities_dbo_Trips_TripId">
+          <End Role="Trips" Type="Self.Trips" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TripActivities" Type="Self.TripActivities" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trips">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TripActivities">
+              <PropertyRef Name="TripId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_TripComments_dbo_TripUsers_TripUserId">
+          <End Role="TripUsers" Type="Self.TripUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TripComments" Type="Self.TripComments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TripUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TripComments">
+              <PropertyRef Name="TripUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_TripPictures_dbo_TripUsers_TripUserId">
+          <End Role="TripUsers" Type="Self.TripUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TripPictures" Type="Self.TripPictures" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TripUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TripPictures">
+              <PropertyRef Name="TripUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_TripUsers_dbo_Trips_TripId">
+          <End Role="Trips" Type="Self.Trips" Multiplicity="0..1" />
+          <End Role="TripUsers" Type="Self.TripUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trips">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TripUsers">
+              <PropertyRef Name="TripId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TripAppModelStoreContainer">
+          <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ActivityVotes" EntityType="Self.ActivityVotes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PushRegistrations" EntityType="Self.PushRegistrations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TripActivities" EntityType="Self.TripActivities" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TripComments" EntityType="Self.TripComments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TripPictures" EntityType="Self.TripPictures" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Trips" EntityType="Self.Trips" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TripUsers" EntityType="Self.TripUsers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_ActivityVotes_dbo_TripActivities_TripActivityId" Association="Self.FK_dbo_ActivityVotes_dbo_TripActivities_TripActivityId">
+            <End Role="TripActivities" EntitySet="TripActivities" />
+            <End Role="ActivityVotes" EntitySet="ActivityVotes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_ActivityVotes_dbo_TripUsers_TripUserId" Association="Self.FK_dbo_ActivityVotes_dbo_TripUsers_TripUserId">
+            <End Role="TripUsers" EntitySet="TripUsers" />
+            <End Role="ActivityVotes" EntitySet="ActivityVotes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_PushRegistrations_dbo_TripUsers_TripUserId" Association="Self.FK_dbo_PushRegistrations_dbo_TripUsers_TripUserId">
+            <End Role="TripUsers" EntitySet="TripUsers" />
+            <End Role="PushRegistrations" EntitySet="PushRegistrations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TripActivities_dbo_Trips_TripId" Association="Self.FK_dbo_TripActivities_dbo_Trips_TripId">
+            <End Role="Trips" EntitySet="Trips" />
+            <End Role="TripActivities" EntitySet="TripActivities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TripComments_dbo_TripUsers_TripUserId" Association="Self.FK_dbo_TripComments_dbo_TripUsers_TripUserId">
+            <End Role="TripUsers" EntitySet="TripUsers" />
+            <End Role="TripComments" EntitySet="TripComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TripPictures_dbo_TripUsers_TripUserId" Association="Self.FK_dbo_TripPictures_dbo_TripUsers_TripUserId">
+            <End Role="TripUsers" EntitySet="TripUsers" />
+            <End Role="TripPictures" EntitySet="TripPictures" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TripUsers_dbo_Trips_TripId" Association="Self.FK_dbo_TripUsers_dbo_Trips_TripId">
+            <End Role="Trips" EntitySet="Trips" />
+            <End Role="TripUsers" EntitySet="TripUsers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TripAppModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="TripAppEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="C__MigrationHistory" EntityType="TripAppModel.C__MigrationHistory" />
+          <EntitySet Name="ActivityVotes" EntityType="TripAppModel.ActivityVote" />
+          <EntitySet Name="PushRegistrations" EntityType="TripAppModel.PushRegistration" />
+          <EntitySet Name="TripActivities" EntityType="TripAppModel.TripActivity" />
+          <EntitySet Name="TripComments" EntityType="TripAppModel.TripComment" />
+          <EntitySet Name="TripPictures" EntityType="TripAppModel.TripPicture" />
+          <EntitySet Name="Trips" EntityType="TripAppModel.Trip" />
+          <EntitySet Name="TripUsers" EntityType="TripAppModel.TripUser" />
+          <AssociationSet Name="FK_dbo_ActivityVotes_dbo_TripActivities_TripActivityId" Association="TripAppModel.FK_dbo_ActivityVotes_dbo_TripActivities_TripActivityId">
+            <End Role="TripActivity" EntitySet="TripActivities" />
+            <End Role="ActivityVote" EntitySet="ActivityVotes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_ActivityVotes_dbo_TripUsers_TripUserId" Association="TripAppModel.FK_dbo_ActivityVotes_dbo_TripUsers_TripUserId">
+            <End Role="TripUser" EntitySet="TripUsers" />
+            <End Role="ActivityVote" EntitySet="ActivityVotes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_PushRegistrations_dbo_TripUsers_TripUserId" Association="TripAppModel.FK_dbo_PushRegistrations_dbo_TripUsers_TripUserId">
+            <End Role="TripUser" EntitySet="TripUsers" />
+            <End Role="PushRegistration" EntitySet="PushRegistrations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TripActivities_dbo_Trips_TripId" Association="TripAppModel.FK_dbo_TripActivities_dbo_Trips_TripId">
+            <End Role="Trip" EntitySet="Trips" />
+            <End Role="TripActivity" EntitySet="TripActivities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TripComments_dbo_TripUsers_TripUserId" Association="TripAppModel.FK_dbo_TripComments_dbo_TripUsers_TripUserId">
+            <End Role="TripUser" EntitySet="TripUsers" />
+            <End Role="TripComment" EntitySet="TripComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TripPictures_dbo_TripUsers_TripUserId" Association="TripAppModel.FK_dbo_TripPictures_dbo_TripUsers_TripUserId">
+            <End Role="TripUser" EntitySet="TripUsers" />
+            <End Role="TripPicture" EntitySet="TripPictures" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_TripUsers_dbo_Trips_TripId" Association="TripAppModel.FK_dbo_TripUsers_dbo_Trips_TripId">
+            <End Role="Trip" EntitySet="Trips" />
+            <End Role="TripUser" EntitySet="TripUsers" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="C__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ContextKey" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="ProductVersion" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ActivityVote">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TripUserId" Type="Int32" Nullable="false" />
+          <Property Name="Vote" Type="Int32" Nullable="false" />
+          <Property Name="TripActivityId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TripActivity" Relationship="TripAppModel.FK_dbo_ActivityVotes_dbo_TripActivities_TripActivityId" FromRole="ActivityVote" ToRole="TripActivity" />
+          <NavigationProperty Name="TripUser" Relationship="TripAppModel.FK_dbo_ActivityVotes_dbo_TripUsers_TripUserId" FromRole="ActivityVote" ToRole="TripUser" />
+        </EntityType>
+        <EntityType Name="PushRegistration">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RegistrationId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TripUserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TripUser" Relationship="TripAppModel.FK_dbo_PushRegistrations_dbo_TripUsers_TripUserId" FromRole="PushRegistration" ToRole="TripUser" />
+        </EntityType>
+        <EntityType Name="TripActivity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Activity" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TripId" Type="Int32" Nullable="false" />
+          <Property Name="TripUserId" Type="Int32" Nullable="false" />
+          <Property Name="Lat" Type="Int64" Nullable="false" />
+          <Property Name="Lon" Type="Int64" Nullable="false" />
+          <Property Name="IsComplete" Type="Boolean" Nullable="false" />
+          <Property Name="Location" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ActivityVotes" Relationship="TripAppModel.FK_dbo_ActivityVotes_dbo_TripActivities_TripActivityId" FromRole="TripActivity" ToRole="ActivityVote" />
+          <NavigationProperty Name="Trip" Relationship="TripAppModel.FK_dbo_TripActivities_dbo_Trips_TripId" FromRole="TripActivity" ToRole="Trip" />
+        </EntityType>
+        <EntityType Name="TripComment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TripUserId" Type="Int32" Nullable="false" />
+          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DetailId" Type="Int32" Nullable="false" />
+          <Property Name="TripActivityId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TripUser" Relationship="TripAppModel.FK_dbo_TripComments_dbo_TripUsers_TripUserId" FromRole="TripComment" ToRole="TripUser" />
+        </EntityType>
+        <EntityType Name="TripPicture">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TripUserId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Lat" Type="Double" Nullable="false" />
+          <Property Name="Lon" Type="Double" Nullable="false" />
+          <Property Name="PictureUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LocationName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TripUser" Relationship="TripAppModel.FK_dbo_TripPictures_dbo_TripUsers_TripUserId" FromRole="TripPicture" ToRole="TripUser" />
+        </EntityType>
+        <EntityType Name="Trip">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartDate" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EndDate" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Destination" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MyName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UserJson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TripActivities" Relationship="TripAppModel.FK_dbo_TripActivities_dbo_Trips_TripId" FromRole="Trip" ToRole="TripActivity" />
+          <NavigationProperty Name="TripUsers" Relationship="TripAppModel.FK_dbo_TripUsers_dbo_Trips_TripId" FromRole="Trip" ToRole="TripUser" />
+        </EntityType>
+        <EntityType Name="TripUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TripId" Type="Int32" />
+          <Property Name="DisplayName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsCreator" Type="Boolean" Nullable="false" />
+          <Property Name="TripCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TripStatus" Type="Int32" Nullable="false" />
+          <Property Name="Lat" Type="Double" Nullable="false" />
+          <Property Name="Lon" Type="Double" Nullable="false" />
+          <NavigationProperty Name="ActivityVotes" Relationship="TripAppModel.FK_dbo_ActivityVotes_dbo_TripUsers_TripUserId" FromRole="TripUser" ToRole="ActivityVote" />
+          <NavigationProperty Name="PushRegistrations" Relationship="TripAppModel.FK_dbo_PushRegistrations_dbo_TripUsers_TripUserId" FromRole="TripUser" ToRole="PushRegistration" />
+          <NavigationProperty Name="TripComments" Relationship="TripAppModel.FK_dbo_TripComments_dbo_TripUsers_TripUserId" FromRole="TripUser" ToRole="TripComment" />
+          <NavigationProperty Name="TripPictures" Relationship="TripAppModel.FK_dbo_TripPictures_dbo_TripUsers_TripUserId" FromRole="TripUser" ToRole="TripPicture" />
+          <NavigationProperty Name="Trip" Relationship="TripAppModel.FK_dbo_TripUsers_dbo_Trips_TripId" FromRole="TripUser" ToRole="Trip" />
+        </EntityType>
+        <Association Name="FK_dbo_ActivityVotes_dbo_TripActivities_TripActivityId">
+          <End Type="TripAppModel.TripActivity" Role="TripActivity" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="TripAppModel.ActivityVote" Role="ActivityVote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TripActivity">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ActivityVote">
+              <PropertyRef Name="TripActivityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_ActivityVotes_dbo_TripUsers_TripUserId">
+          <End Type="TripAppModel.TripUser" Role="TripUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="TripAppModel.ActivityVote" Role="ActivityVote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TripUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ActivityVote">
+              <PropertyRef Name="TripUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_PushRegistrations_dbo_TripUsers_TripUserId">
+          <End Type="TripAppModel.TripUser" Role="TripUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="TripAppModel.PushRegistration" Role="PushRegistration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TripUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PushRegistration">
+              <PropertyRef Name="TripUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_TripActivities_dbo_Trips_TripId">
+          <End Type="TripAppModel.Trip" Role="Trip" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="TripAppModel.TripActivity" Role="TripActivity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trip">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TripActivity">
+              <PropertyRef Name="TripId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_TripComments_dbo_TripUsers_TripUserId">
+          <End Type="TripAppModel.TripUser" Role="TripUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="TripAppModel.TripComment" Role="TripComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TripUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TripComment">
+              <PropertyRef Name="TripUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_TripPictures_dbo_TripUsers_TripUserId">
+          <End Type="TripAppModel.TripUser" Role="TripUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="TripAppModel.TripPicture" Role="TripPicture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TripUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TripPicture">
+              <PropertyRef Name="TripUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_TripUsers_dbo_Trips_TripId">
+          <End Type="TripAppModel.Trip" Role="Trip" Multiplicity="0..1" />
+          <End Type="TripAppModel.TripUser" Role="TripUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trip">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TripUser">
+              <PropertyRef Name="TripId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TripAppModelStoreContainer" CdmEntityContainer="TripAppEntities">
+          <EntitySetMapping Name="C__MigrationHistory">
+            <EntityTypeMapping TypeName="TripAppModel.C__MigrationHistory">
+              <MappingFragment StoreEntitySet="__MigrationHistory">
+                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ActivityVotes">
+            <EntityTypeMapping TypeName="TripAppModel.ActivityVote">
+              <MappingFragment StoreEntitySet="ActivityVotes">
+                <ScalarProperty Name="TripActivityId" ColumnName="TripActivityId" />
+                <ScalarProperty Name="Vote" ColumnName="Vote" />
+                <ScalarProperty Name="TripUserId" ColumnName="TripUserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PushRegistrations">
+            <EntityTypeMapping TypeName="TripAppModel.PushRegistration">
+              <MappingFragment StoreEntitySet="PushRegistrations">
+                <ScalarProperty Name="TripUserId" ColumnName="TripUserId" />
+                <ScalarProperty Name="RegistrationId" ColumnName="RegistrationId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TripActivities">
+            <EntityTypeMapping TypeName="TripAppModel.TripActivity">
+              <MappingFragment StoreEntitySet="TripActivities">
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="IsComplete" ColumnName="IsComplete" />
+                <ScalarProperty Name="Lon" ColumnName="Lon" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="TripUserId" ColumnName="TripUserId" />
+                <ScalarProperty Name="TripId" ColumnName="TripId" />
+                <ScalarProperty Name="Details" ColumnName="Details" />
+                <ScalarProperty Name="Activity" ColumnName="Activity" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TripComments">
+            <EntityTypeMapping TypeName="TripAppModel.TripComment">
+              <MappingFragment StoreEntitySet="TripComments">
+                <ScalarProperty Name="TripActivityId" ColumnName="TripActivityId" />
+                <ScalarProperty Name="DetailId" ColumnName="DetailId" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="TripUserId" ColumnName="TripUserId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TripPictures">
+            <EntityTypeMapping TypeName="TripAppModel.TripPicture">
+              <MappingFragment StoreEntitySet="TripPictures">
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="PictureUrl" ColumnName="PictureUrl" />
+                <ScalarProperty Name="Lon" ColumnName="Lon" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="TripUserId" ColumnName="TripUserId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Trips">
+            <EntityTypeMapping TypeName="TripAppModel.Trip">
+              <MappingFragment StoreEntitySet="Trips">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserJson" ColumnName="UserJson" />
+                <ScalarProperty Name="MyName" ColumnName="MyName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TripUsers">
+            <EntityTypeMapping TypeName="TripAppModel.TripUser">
+              <MappingFragment StoreEntitySet="TripUsers">
+                <ScalarProperty Name="Lon" ColumnName="Lon" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="TripStatus" ColumnName="TripStatus" />
+                <ScalarProperty Name="TripCode" ColumnName="TripCode" />
+                <ScalarProperty Name="IsCreator" ColumnName="IsCreator" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+                <ScalarProperty Name="TripId" ColumnName="TripId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

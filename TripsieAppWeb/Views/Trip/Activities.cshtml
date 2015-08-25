@@ -1,0 +1,343 @@
+﻿@model TripsieAppWeb.TripUser
+
+@{
+    //Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Activities</title>
+</head>
+<body>
+
+
+    <p>
+        <div>
+            @Html.ActionLink("Trip Home", "Detail", "Trip", new { @id = @Model.TripCode }, new { style = "margin-right:10px" })
+            @Html.ActionLink("Activities", "Activities", "Trip", new { @id = @Model.TripCode }, new { style = "margin-right:10px" })
+            @Html.ActionLink("Comments", "Comments", "Trip", new { @id = @Model.TripCode }, new { style = "margin-right:10px" })
+            @Html.ActionLink("Pictures", "Pictures", "Trip", new { @id = @Model.TripCode }, new { style = "margin-right:10px" })
+        </div>
+    </p>
+
+    @Html.Hidden("TripId", @Model.TripId)
+    @Html.Hidden("TripUserId", @Model.Id)
+
+    <h1>@Model.Trip.Destination Activities</h1>
+
+    <button id="ActivityAddButton" type="button">+ Add Activity</button>
+
+
+    <div id="ActivityAddDiv" style="margin-bottom: 10px">
+
+        <p style="margin-top:10px">Activity: @Html.TextBox("ActivityTextBox", "", new { }) </p>
+        <p style="margin-top:10px">Details: @Html.TextBox("DetailsTextBox", "", new { }) </p>
+
+        <p style="margin-top:10px">Location: @Html.TextBox("LocationTextBox", "", new { }) </p>
+
+        <button id="SubmitButton" type="button">Submit</button>
+
+    </div>
+
+
+        @foreach (var m in Model.Trip.TripActivities.OrderBy(r=> r.IsComplete).ThenByDescending(r=> r.ActivityVotes.Sum(x=> x.Vote)))
+        {
+            @Html.Hidden("ActivityVote" + @m.Id, @Model.ActivityVotes.Where(r=> r.TripActivityId == m.Id).Select(r=> r.Vote).FirstOrDefault())
+            @Html.Hidden("SendingActivityVote" + @m.Id,false)
+
+            <div style=" margin-bottom: 15px; margin-top:10.0px">
+
+                @if (m.ActivityVotes.Any(r => r.TripUserId == @Model.Id && m.ActivityVotes.FirstOrDefault(x => x.TripUserId == @Model.Id).Vote > 0))
+                {
+                    <img class="upButtonClick @m.Id" id="VoteImgUp-@m.Id" height="30" width="30" src='~/Content/Images/thumbs_up_checked.png' />
+                }
+
+                else
+                {
+                    <img class="upButtonClick @m.Id" id="VoteImgUp-@m.Id" height="30" width="30" src='~/Content/Images/thumbs_up_unchecked.png' />
+                }
+
+                <label id="LabelImgUp-@m.Id">@m.ActivityVotes.Where(r => r.Vote > 0).Count()</label>
+
+                @if (m.ActivityVotes.Any(r => r.TripUserId == @Model.Id && m.ActivityVotes.FirstOrDefault(x => x.TripUserId == @Model.Id).Vote < 0))
+                {
+                    <img class="downButtonClick @m.Id" id="VoteImgDown-@m.Id" height="30" width="30" src='/Content/Images/thumbs_down_checked.png' style="margin-left: 15px" />
+                }
+
+                else
+                {
+                    <img class="downButtonClick @m.Id" id="VoteImgDown-@m.Id" height="30" width="30" src='/Content/Images/thumbs_down_unchecked.png' style="margin-left: 15px" />
+                }
+
+
+                <label id="LabelImgDown-@m.Id">@m.ActivityVotes.Where(r => r.Vote < 0).Count()</label>
+
+                <img  id="indicator-@m.Id" height="20" width="20" src='~/Content/Images/indicator.gif' style="margin-left: 5px;display: none" />
+
+                <b>
+                    <label style="margin-left: 15px;font-size:18px">
+                        @m.Activity
+                    </label>
+                </b>
+
+                <div>
+                    @m.Details
+                </div>
+
+                @Html.ActionLink("Details", "ActivityDetails", "Trip", new { id = m.Id, code = @Model.TripCode }, null)
+
+</div>
+        }
+
+
+    @*<a href="https://www.youtube.com/watch?v=U-apLT6Ot3s" style="margin-top: 30px">So many Activites!!</a>*@
+
+    <script src="~/scripts/jquery-2.1.4.min.js" type="text/javascript"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            var activityTextBox = $('#ActivityTextBox');
+            var DetailsTextBox = $('#DetailsTextBox');
+            var LocationTextBox = $('#LocationTextBox');
+
+            var submitButton = $('#SubmitButton');
+
+            var addButton = $('#ActivityAddButton');
+            var addDiv = $('#ActivityAddDiv');
+
+            addDiv.hide();
+
+
+            var $upButtons = $('VoteImgUp');
+            var $downButtons = $('VoteImgUp');
+
+            submitButton.on('click', function () {
+                addButton.fadeIn(200);
+                addDiv.fadeOut(0);
+
+                var server = "http://teambitewolf.azurewebsites.net";
+                //server = "http://localhost:49669"; 
+                var url = server + "/api/TripActivities";
+
+
+                var tuid = $('#TripUserId').val();
+                var tripId = $('#TripId').val();
+
+                var Activity = new Object();
+                Activity.Activity = activityTextBox.val();
+                Activity.Details = DetailsTextBox.val();
+                Activity.TripId = tripId;
+                Activity.TripUserId = tuid;
+                Activity.Location = LocationTextBox.val();
+
+                $.ajax({
+                    data: Activity,
+                    dataType: 'json',
+                    url: url,
+                    type: 'POST',
+                    success: function (data)
+                    {
+
+                    },
+                    error: function (x, y, z) {
+                        //alert("Error: unable to add comment. Please try again.");
+                        //var currentVal = $('#ButtonResponse').val();
+                        //$('#ButtonResponse').prop('enabled', !currentVal);
+                    },
+                });
+
+
+            });
+
+            addButton.on('click', function () {
+
+                addButton.fadeOut(0);
+                addDiv.fadeIn(200);
+
+            });
+
+
+            $(".upButtonClick").on('click', function () {
+
+                var tuid = $('#TripUserId').val();
+                var activityId = $(this).attr('class').replace('upButtonClick ', '');
+
+                // already sending vote
+                if ($('#SendingActivityVote' + activityId) == true)
+                {
+                    return;
+                }
+
+                $('SendingActivityVote' + activityId).val(true);
+
+                var upLabel = $('#LabelImgUp-' + activityId);
+                var downLabel = $('#LabelImgDown-' + activityId);
+
+                $('#indicator' + '-' + activityId).show();
+
+                $('#VoteImgUp' + '-' + activityId).prop('disabled', true);
+                $('#VoteImgDown' + '-' + activityId).prop('disabled', true);
+
+                var server = "http://teambitewolf.azurewebsites.net";
+                //server = "http://localhost:49669"; 
+                var myUrl = server + "/api/ActivityVotes";
+
+                var ActivityVote = new Object();
+                ActivityVote.TripUserId = tuid;
+                ActivityVote.TripActivityId = activityId;
+                ActivityVote.Vote = 1;
+
+                var currentVote = $('#ActivityVote' + activityId).val();
+
+                $.ajax({
+                    data: ActivityVote,
+                    dataType: 'json',
+                    url: myUrl,
+                    type: 'POST',
+                    success: function (data) {
+
+                        $('#VoteImgUp' + '-' + activityId).attr('src', '/Content/Images/thumbs_up_checked.png');
+                        $('#VoteImgDown' + '-' + activityId).attr('src', '/Content/Images/thumbs_down_unchecked.png');
+
+                        if (currentVote != null && currentVote != 0)
+                        {
+                            if(currentVote < 0)
+                            {
+                                votes = upLabel.text();
+                                votes++;
+                                upLabel.text(votes);
+
+                                var downVotes = downLabel.text();
+                                downVotes--;
+                                downLabel.text(downVotes);
+                            }
+
+                            else
+                            {
+                                // already voted, don't update
+                            }
+                        }
+
+                        else
+                        {
+                            votes = upLabel.text();
+                            votes++;
+                            upLabel.text(votes);
+                        }
+
+                        $('#ActivityVote' + activityId).val(1);
+                    },
+
+                    error: function (x, y, z) {
+                    },
+
+                    complete: function () {
+
+                        $('#VoteImgUp' + '-' + activityId).prop('disabled', false).delay(2000);
+                        $('#VoteImgDown' + '-' + activityId).prop('disabled', false);
+
+                        $('#indicator' + '-' + activityId).hide();
+
+                    }
+                });
+
+                $('SendingActivityVote' + activityId).val(false);
+            }
+            );
+
+            $(".downButtonClick").on('click', function () {
+
+
+                var tuid = $('#TripUserId').val();
+                var activityId = $(this).attr('class').replace('downButtonClick ', '');
+
+                // already sending vote
+                if ($('#SendingActivityVote' + activityId) == true) {
+                    return;
+                }
+
+                $('SendingActivityVote' + activityId).val(true);
+
+                var upLabel = $('#LabelImgUp-' + activityId);
+                var downLabel = $('#LabelImgDown-' + activityId);
+
+                $('#VoteImgUp' + '-' + activityId).prop('disabled', true);
+                $('#VoteImgDown' + '-' + activityId).prop('disabled', true);
+
+                $('#indicator' + '-' + activityId).show();
+
+                var server = "http://teambitewolf.azurewebsites.net";
+                //server = "http://localhost:49669"; 
+                var myUrl = server + "/api/ActivityVotes";
+
+                var ActivityVote = new Object();
+                ActivityVote.TripUserId = tuid;
+                ActivityVote.TripActivityId = activityId;
+                ActivityVote.Vote = -1;
+
+                var currentVote = $('#ActivityVote' + activityId).val();
+
+                $.ajax({
+                    data: ActivityVote,
+                    dataType: 'json',
+                    url: myUrl,
+                    type: 'POST',
+                    success: function (data) {
+
+                        $('#VoteImgUp' + '-' + activityId).attr('src', '/Content/Images/thumbs_up_unchecked.png');
+                        $('#VoteImgDown' + '-' + activityId).attr('src', '/Content/Images/thumbs_down_checked.png');
+
+                        if (currentVote != null && currentVote  != 0) {
+                            if (currentVote > 0) {
+                                votes = downLabel.text();
+                                votes++;
+                                downLabel.text(votes);
+
+                                upVotes = upLabel.text();
+                                upVotes--;
+                                upLabel.text(upVotes);
+                            }
+
+                            else {
+                                // already voted, don't update
+                            }
+                        }
+
+                        else {
+                            votes = downLabel.text();
+                            votes++;
+                            downLabel.text(votes);
+                        }
+
+                        $('#ActivityVote' + activityId).val(1);
+
+                        $('#ActivityVote' + activityId).val(-1);
+                    },
+
+                    error: function (x, y, z) {
+                    },
+
+                    complete: function () {
+                        $('VoteImgUp' + '-' + activityId).prop('disabled', false);
+                        $('VoteImgDown' + '-' + activityId).prop('disabled', false);
+
+                        $('#indicator' + '-' + activityId).hide();
+                    }
+                });
+
+                $('SendingActivityVote' + activityId).val(false);
+            }
+);
+
+        });
+
+
+    </script>
+
+        </body>
+        </html>

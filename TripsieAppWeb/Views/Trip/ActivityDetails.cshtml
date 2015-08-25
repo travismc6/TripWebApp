@@ -1,0 +1,226 @@
+﻿@model TripsieAppWeb.TripActivity
+
+@{
+    
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Pictures</title>
+</head>
+<body>
+
+    @Html.Hidden("TripActivityId", @Model.Id)
+    @Html.Hidden("TripUserId", (int)@ViewBag.TripUser.Id)
+    @Html.Hidden("MyName", (string)@ViewBag.TripUser.DisplayName)
+
+    <p>
+        <div>
+            @Html.ActionLink("Trip Home", "Detail", "Trip", new { @id = @ViewBag.TripUser.TripCode }, new { style = "margin-right:10px" })
+            @Html.ActionLink("Activities", "Activities", "Trip", new { @id = @ViewBag.TripUser.TripCode }, new { style = "margin-right:10px" })
+            @Html.ActionLink("Comments", "Comments", "Trip", new { @id = @ViewBag.TripUser.TripCode }, new { style = "margin-right:10px" })
+            @Html.ActionLink("Pictures", "Pictures", "Trip", new { @id = @ViewBag.TripUser.TripCode }, new { style = "margin-right:10px" })
+        </div>
+    </p>
+
+    <div>
+        <h2>@Model.Activity</h2>
+
+        <b>Suggested by: </b>@ViewBag.createdBy.DisplayName
+
+        <p style="margin-top:10px">
+            @Model.Details
+        </p>
+
+
+        @if(!String.IsNullOrEmpty(@Model.Location))
+        { 
+                <b>Location: </b>
+  
+                <a href="http://maps.google.com/?q=@Model.Location" > @Model.Location</a>
+            
+        }
+        
+        @if(@Model.TripUserId == ViewBag.TripUser.Id)
+        {
+            <div>
+                @Html.TextBox("TextBoxEditLocation", @Model.Location)
+                <button id="UpdateLocation" type="button">Update Location</button>
+            </div>
+        }
+        
+
+        <div>
+            <h3 style="color:#003300">
+                @{
+                    var label = "Up Vote";
+
+                    if (Model.ActivityVotes.Where(r => r.Vote > 0).Count() != 1)
+                    {
+                        label += "s";
+                    }
+                }
+
+                @Model.ActivityVotes.Where(r => r.Vote > 0).Count() @label
+
+            </h3>
+                @foreach (var m in Model.ActivityVotes.Where(r => r.Vote > 0))
+                {
+                    <b>@m.TripUser.DisplayName</b>
+                }
+        </div>
+
+        <div>
+            <h3 style="margin-top:25px;color:#800000">
+
+                @{
+                    label = "Down Vote";
+                    
+                    if (Model.ActivityVotes.Where(r => r.Vote < 0).Count() != 1)
+                    { 
+                        label += "s";
+                    }
+                }
+
+                @Model.ActivityVotes.Where(r => r.Vote < 0).Count() @label
+                
+            </h3>
+
+            @foreach (var m in Model.ActivityVotes.Where(r => r.Vote < 0))
+            {
+                <b>@m.TripUser.DisplayName</b>
+            }
+        </div>
+
+        <p style="margin-top:20px">Add Comment: @Html.TextArea("CommentTextBox") 
+            <button id="CommentButton" type="button">Submit</button>
+        </p>
+
+        <div id="CommentList" style="margin-top:5px">
+            @foreach (var m in @ViewBag.Comments)
+            {
+                <div>
+                    <b>@m.TripUser.DisplayName</b>:  @m.Comment <br/>
+                    </div>
+            }
+        </div>
+
+
+
+        <p style="margin-top:20px">
+            <button id="CompleteButton" type="button" style="margin-top:10px">Mark as Complete</button>
+        </p>
+
+
+    </div>
+
+    <script src="~/scripts/jquery-2.1.4.min.js" type="text/javascript"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            $('#UpdateLocation').click(function () {
+
+                var location = $('#TextBoxEditLocation').val();
+
+                var activityId = TripActivityId = $('#TripActivityId').val();
+
+                var server = "http://teambitewolf.azurewebsites.net";
+                //server = "http://localhost:49669";
+                var myUrl = server + "/api/TripActivities/UpdateActivityLocation/" + activityId + "/" + location;
+
+
+                $.ajax({
+                    dataType: 'json',
+                    url: myUrl,
+                    type: 'Put',
+                    success: function (data) {
+
+                    },
+
+                    error: function (x, y, z) {
+
+                    },
+
+                    complete: function () {
+
+                        $('#TextBoxEditLocation').val("");
+
+                    }
+
+
+
+                });
+
+            });
+
+
+
+        $('#CommentButton').click(function () {
+
+            var comment = $('#CommentTextBox').val();
+
+            if (!comment) {
+                return;
+            }
+
+            $('#CommentButton').prop('disabled', true);
+            $('#CommentTextBox').prop('disabled', true);
+
+            var d = new Date();
+
+            var tuid = $('#TripUserId').val();
+            var comment = $('#CommentTextBox').val();
+            var date = d.getDate();
+
+            var TripComment = new Object();
+            TripComment.Comment = comment;
+            TripComment.TripUserId = $('#TripUserId').val();
+            TripComment.TripActivityId = $('#TripActivityId').val();
+
+            var server = "http://teambitewolf.azurewebsites.net";
+            //server = "http://localhost:49669";
+            var myUrl = server + "/api/TripComments";
+
+
+            $.ajax({
+                data: TripComment,
+                dataType:'json',
+                url: myUrl,
+                type: 'POST',
+                success: function (data) {
+                    //$('#CommentList').append("<b>" + $('#MyName').val() +  ": </b>" + comment);
+
+                    //$('#CommentTextArea').val('');
+
+                },
+
+                error: function (x, y, z) {
+                    //alert("Error: unable to add comment. Please try again.");
+                    //var currentVal = $('#ButtonResponse').val();
+                    //$('#ButtonResponse').prop('enabled', !currentVal);
+                },
+
+                complete: function () {
+                    $('#CommentList').prepend("<b>" + $('#MyName').val() + ": </b>" + comment + "<br/>");
+
+                    $('#CommentTextBox').val('');
+
+                    $('#CommentButton').prop('disabled', false);
+                    $('#CommentTextBox').prop('disabled', false);
+
+
+                }
+            });
+
+
+        });
+    });
+
+    </script>
+</body>
+</html>

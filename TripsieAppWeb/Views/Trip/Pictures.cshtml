@@ -1,0 +1,107 @@
+﻿@model List<TripsieAppWeb.TripPicture>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Pictures</title>
+</head>
+<body>
+
+    @Html.Hidden("TripUserId",(string)ViewBag.UserId)
+
+    <p>
+        <div>
+            @Html.ActionLink("Trip Home", "Detail", "Trip", new { @id = @ViewBag.UserId }, new { style = "margin-right:10px" })
+            @Html.ActionLink("Activities", "Activities", "Trip", new { @id = @ViewBag.UserId }, new { style = "margin-right:10px" })
+            @Html.ActionLink("Comments", "Comments", "Trip", new { @id = @ViewBag.UserId }, new { style = "margin-right:10px" })
+            @Html.ActionLink("Pictures", "Pictures", "Trip", new { @id = @ViewBag.UserId }, new { style = "margin-right:10px" })
+        </div>
+    </p>
+
+    <p>
+        <button id="UploadPicture" type="button">Upload Picture</button>
+    </p>
+
+    <p>
+        <button id="ViewMap" type="button">View Map</button>
+    </p>
+
+    <div> 
+        @foreach (var m in @Model.OrderByDescending(r=> r.Date))
+        {
+            <div style="margin-top:20px">
+                <img src="@m.PictureUrl" height="200" id="TripImg-@m.Id" class="TripImg @m.PictureUrl" /> <br />
+               
+                @Html.Label("Posted by: " + @m.TripUser.DisplayName) <br />
+
+                @Html.Label(@m.Description) <br />
+                
+               @if ((@DateTime.Now.Year != @m.Date.Year))
+               {
+                    @Html.Label(@m.Date.ToLocalTime().ToString("MM-dd-yyyy"))
+               }
+               
+                else if ((@DateTime.Now.DayOfYear != @m.Date.DayOfYear))
+                {
+                    @Html.Label(@m.Date.ToLocalTime().ToString("MM-dd"))
+                }
+
+               else 
+               {
+                @Html.Label(@m.Date.ToLocalTime().ToString("hh:mm tt"))
+               }
+                 
+
+                @if (m.Lat != null && m.Lon != null && m.Lat != 0 && m.Lon != 0)
+                {
+                    var latlon = @m.Lat + "," + @m.Lon;
+                    
+                    <br/><a href="http://maps.google.com/?q=@latlon"> @latlon</a> <br/>
+                }
+
+            </div>
+        }
+    </div>
+
+    <script src="~/scripts/jquery-2.1.4.min.js" type="text/javascript"></script>
+
+    <script>
+
+    $(document).ready(function () {
+
+        var uploadButton = $('#UploadPicture');
+        var viewMapButton = $('#ViewMap');
+        var code = $('#TripUserId').val();
+
+        uploadButton.on('click', function () {
+
+            window.location.href = "/Trip/UploadPicture/" + code;
+        });
+
+        viewMapButton.on('click', function () {
+
+            window.location.href = "/Trip/PicturesMap/" + code;
+        });
+
+
+        $(".TripImg").on('click', function ()
+        {
+            var url = $(this).attr('class').replace('TripImg ', '');
+
+            window.open(url);
+        });
+
+
+
+
+    });
+
+
+    </script>
+
+
+
+</body>
+</html>

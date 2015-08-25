@@ -1,0 +1,62 @@
+﻿@model TripsieAppWeb.Models.SecretCode
+
+
+
+
+@{
+    ViewBag.Title = "EnterCode";
+    //Layout = null;
+}
+
+
+
+<body>
+<h2>Enter your 5 digit Secret Code!</h2>
+    @Html.ActionLink("What's this?", "")
+
+
+@*<input type="text" placeholder="Code" id="code-fld" name="code"/>*@
+
+@*@using (Html.BeginForm("TripDetail", "TripDetailController", new { id= model.Code }))
+    {
+        <p>Code: @Html.TextBoxFor(x => x.Code) </p>
+
+        <input type="submit" value="Submit"   />
+    }*@
+
+
+    <p style="margin-top:20px">Code: @Html.TextBox("CodeTextBox", "", new { maxlength = 5 }) </p>
+
+<button  id="SubmitButton" type="button">Submit</button>
+
+@if (ViewBag.IsFound != null && ViewBag.IsFound == false)
+{
+    @Html.Label("Trip was not found. Please check your code and try again.", new { style = "color:FF0000" });
+}
+
+    <script src="~/scripts/jquery-2.1.4.min.js" type="text/javascript"></script>
+
+    <script>
+
+    $(document).ready(function () {
+        $('#SubmitButton').click(function () {
+
+            var code = $('#CodeTextBox').val();
+
+            window.location.href = "/Trip/Detail/" + code;
+
+
+        });
+    });
+
+    </script>
+
+    </body>
+
+
+
+
+
+
+
+

@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "Welcome to Tripsie!";
+    //Layout = null;
+}
+
+<html>
+    <body>
+        <h2>Welcome to Tripsie!</h2>
+
+        <div style="display:block;margin-bottom:15px">
+            @Html.ActionLink("Create Trip", "CreateTrip")
+        </div>
+
+
+        <div style="display:block;margin-bottom:15px">
+            @Html.ActionLink("Enter Code", "EnterCode", "Home")
+        </div>
+
+        <div style="display:block;margin-bottom:15px">
+            @Html.ActionLink("Forgot your code?", "ForgotCode", "Home")
+        </div>
+
+    </body>
+</html>
+
+

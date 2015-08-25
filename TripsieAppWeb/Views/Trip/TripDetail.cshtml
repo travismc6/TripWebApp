@@ -1,0 +1,117 @@
+﻿@model TripsieAppWeb.TripUser
+
+@{
+    //Layout = null;
+}
+
+@Html.Hidden("TripUserCode", @Model.TripCode)
+@Html.Hidden("Response", @Model.TripStatus)
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TripDetails</title>
+</head>
+<body>
+
+    <p>
+        <div>
+            @Html.ActionLink("Trip Home", "Detail", "Trip", new { @id = @Model.TripCode }, new { style = "margin-right:10px" })
+            @Html.ActionLink("Activities", "Activities", "Trip", new { @id = @Model.TripCode }, new { style = "margin-right:10px" })
+            @Html.ActionLink("Comments", "Comments", "Trip", new { @id = @Model.TripCode }, new { style = "margin-right:10px" })
+            @Html.ActionLink("Pictures", "Pictures", "Trip", new { @id = @Model.TripCode }, new { style = "margin-right:10px" })
+        </div>
+    </p>
+
+    <p>
+        <h3>
+            Welcome, @Model.DisplayName
+        </h3>
+    </p>
+
+    <p>
+        <h1> @Model.Trip.Destination</h1>
+
+        Created by: @Model.Trip.MyName
+        
+        <p>@Model.Trip.StartDate - @Model.Trip.EndDate</p>
+
+        <p>@Model.Trip.Description</p>
+
+        <p>I'm In! @Html.RadioButton("RB-In", "I'm In!", @Model.TripStatus == 1) </p>
+
+        <p>I'm Out @Html.RadioButton("RB-Out", "I'm Out", @Model.TripStatus == 2) </p>
+
+
+
+    <label id="UpdateLabel" style="color:#00ff00"></label>
+
+
+    <div id="ResponseDiv"   >
+        @Html.TextArea("ResponseTextArea")
+
+        <button type="button" id="ButtonResponse">
+            Send Response!
+        </button>
+
+        <img id="ReponseIndicator" height="24" width="24" src="~/Content/Images/indicator.gif" />
+    </div>
+    
+
+
+    <p>
+        
+    </p>
+
+    <h2>Invitees</h2>
+
+    @foreach(var m in Model.Trip.TripUsers)
+    {
+        <div>
+            @{var src = "/Content/Images/";}
+
+
+            @if(m.TripStatus == 1)
+            {   src += "yes.png";           
+            }
+
+            else if(m.TripStatus == 2)
+            {
+                src += "no.png";    
+            }
+
+            else
+            {
+                src += "pending.png";    
+            }
+
+
+            <img height="24" width="24" id="Status-@m.TripCode" src=@src />
+
+            @Html.Label(m.DisplayName, new { style = "font-size : 24.0px" })
+
+           
+        </div>
+    }
+
+
+
+
+    <script src="~/scripts/jquery-2.1.4.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    
+    <script src="~/scripts/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>
+    <script src="~/scripts/TripDetail.js" type="text/javascript"></script>
+
+    
+
+
+</body>
+
+
+
+
+    
+
+
+
+
