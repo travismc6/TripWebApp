@@ -1,7 +1,7 @@
 ﻿@model List<TripsieAppWeb.TripComment>
 
 @{
-    //Layout = null;
+    Layout = "~/Views/Shared/_Layout-Trip.cshtml";
 }
 
 <!DOCTYPE html>
@@ -12,15 +12,6 @@
     <title>Comments</title>
 </head>
 <body>
-
-    <p>
-        <div>
-            @Html.ActionLink("Trip Home", "Detail", "Trip", new { @id = @ViewBag.TripUser.TripCode }, new { style = "margin-right:10px" })
-            @Html.ActionLink("Activities", "Activities", "Trip", new { @id = @ViewBag.TripUser.TripCode }, new { style = "margin-right:10px" })
-            @Html.ActionLink("Comments", "Comments", "Trip", new { @id = @ViewBag.TripUser.TripCode }, new { style = "margin-right:10px" })
-            @Html.ActionLink("Pictures", "Pictures", "Trip", new { @id = @ViewBag.TripUser.TripCode }, new { style = "margin-right:10px" })
-        </div>
-    </p>
 
     @Html.Hidden("TripUserId", (int)ViewBag.TripUser.Id)
     @Html.Hidden("MyName", (string)ViewBag.TripUser.DisplayName)

@@ -1,20 +1,12 @@
 ﻿@model TripsieAppWeb.Models.UploadImageFile
 
 @{
+    Layout = "~/Views/Shared/_Layout-Trip.cshtml";
 }
 
 <html>
 
 <body>
-
-    <p>
-        <div>
-            @Html.ActionLink("Trip Home", "Detail", "Trip", new { @id = @ViewBag.UserId }, new { style = "margin-right:10px" })
-            @Html.ActionLink("Activities", "Activities", "Trip", new { @id = @ViewBag.UserId }, new { style = "margin-right:10px" })
-            @Html.ActionLink("Comments", "Comments", "Trip", new { @id = @ViewBag.UserId }, new { style = "margin-right:10px" })
-            @Html.ActionLink("Pictures", "Pictures", "Trip", new { @id = @ViewBag.UserId }, new { style = "margin-right:10px" })
-        </div>
-    </p>
 
 @using (Html.BeginForm("UploadPicture", "Trip", FormMethod.Post, new { @id = "frmImg", enctype = "multipart/form-data" }))
 { 

@@ -1,5 +1,9 @@
 ﻿@model List<TripsieAppWeb.TripPicture>
 
+@{
+    Layout = "~/Views/Shared/_Layout-Trip.cshtml";
+}
+
 <!DOCTYPE html>
 
 <html>
@@ -12,58 +16,66 @@
     @Html.Hidden("TripUserId",(string)ViewBag.UserId)
 
     <p>
-        <div>
-            @Html.ActionLink("Trip Home", "Detail", "Trip", new { @id = @ViewBag.UserId }, new { style = "margin-right:10px" })
-            @Html.ActionLink("Activities", "Activities", "Trip", new { @id = @ViewBag.UserId }, new { style = "margin-right:10px" })
-            @Html.ActionLink("Comments", "Comments", "Trip", new { @id = @ViewBag.UserId }, new { style = "margin-right:10px" })
-            @Html.ActionLink("Pictures", "Pictures", "Trip", new { @id = @ViewBag.UserId }, new { style = "margin-right:10px" })
-        </div>
-    </p>
-
-    <p>
-        <button id="UploadPicture" type="button">Upload Picture</button>
+        <button id="UploadPicture" type="button">Upload Pictures</button>
     </p>
 
     <p>
         <button id="ViewMap" type="button">View Map</button>
     </p>
 
-    <div> 
+    <div style="float:none"> 
         @foreach (var m in @Model.OrderByDescending(r=> r.Date))
         {
-            <div style="margin-top:20px">
-                <img src="@m.PictureUrl" height="200" id="TripImg-@m.Id" class="TripImg @m.PictureUrl" /> <br />
-               
-                @Html.Label("Posted by: " + @m.TripUser.DisplayName) <br />
+            <div style="margin-top:20px;float:left" >
+                <ul style="list-style:none">
+                    <li>
+                        <img src="@m.PictureUrl" id="TripImg-@m.Id" class="TripImg @m.PictureUrl" style="max-height:300px;max-width:300px" />
+                    </li>
 
-                @Html.Label(@m.Description) <br />
+                    <li>
+                        <b>Posted by: @m.TripUser.DisplayName </b>
+                    </li>
+
+                    <li>
+                        @m.Description
+                    </li>
+
+                    @if ((@DateTime.Now.Year != @m.Date.Year))
+                    {
+                        @Html.Label(@m.Date.ToLocalTime().ToString("MM-dd-yyyy"))
+                    }
+
+                    else if ((@DateTime.Now.DayOfYear != @m.Date.DayOfYear))
+                    {
+                        @Html.Label(@m.Date.ToLocalTime().ToString("MM-dd"))
+                    }
+
+                    else
+                    {
+                        @Html.Label(@m.Date.ToLocalTime().ToString("hh:mm tt"))
+                    }
+
+
+                    @if (m.Lat != null && m.Lon != null && m.Lat != 0 && m.Lon != 0)
+                    {
+                        var latlon = @m.Lat + "," + @m.Lon;
+
+                        <a href="http://maps.google.com/?q=@latlon">Location</a>
+                    }
+
+                </ul>
+
+
+
                 
-               @if ((@DateTime.Now.Year != @m.Date.Year))
-               {
-                    @Html.Label(@m.Date.ToLocalTime().ToString("MM-dd-yyyy"))
-               }
-               
-                else if ((@DateTime.Now.DayOfYear != @m.Date.DayOfYear))
-                {
-                    @Html.Label(@m.Date.ToLocalTime().ToString("MM-dd"))
-                }
-
-               else 
-               {
-                @Html.Label(@m.Date.ToLocalTime().ToString("hh:mm tt"))
-               }
-                 
-
-                @if (m.Lat != null && m.Lon != null && m.Lat != 0 && m.Lon != 0)
-                {
-                    var latlon = @m.Lat + "," + @m.Lon;
-                    
-                    <br/><a href="http://maps.google.com/?q=@latlon"> @latlon</a> <br/>
-                }
-
+             
             </div>
         }
     </div>
+
+    <div style="float:none">
+    <label  > foo</label>
+        </div>
 
     <script src="~/scripts/jquery-2.1.4.min.js" type="text/javascript"></script>
 

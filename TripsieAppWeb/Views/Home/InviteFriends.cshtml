@@ -1,0 +1,35 @@
+﻿@model TripsieAppWeb.Trip
+
+@{
+    
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>InviteFriends</title>
+</head>
+<body>
+    <div>
+
+        <h3>Invite Friends to @Model.Destination -  Step 2</h3>
+
+        <form method="post" action="InviteFriendsAction">
+
+            @Html.HiddenFor(x => x.Destination)
+            @Html.HiddenFor(x => x.EndDate)
+            @Html.HiddenFor(x => x.Description)
+            @Html.HiddenFor(x => x.StartDate)
+            @Html.HiddenFor(x => x.TripUsers)
+            @Html.HiddenFor(x => x.MyName)
+
+            <input type="submit" value="Create Trip" class="btn btn-primary" style="margin-top:20px" />
+
+         </form>
+
+        
+     </div>
+</body>
+</html>

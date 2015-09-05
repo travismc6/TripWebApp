@@ -1,18 +1,70 @@
-﻿@{
-}
+﻿@model TripsieAppWeb.Models.CreateTrip
 
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Pictures</title>
+    <title>Create a New Trip</title>
 </head>
 <body>
     <div>
-        <h2>Coming Soon!!!</h2>
+        <h3>Create a New Trip -  Step 1</h3>
 
-        <img src="~/Content/Images/logo.png" />
+        <form method="post" action="CreateTripAction">
+            <div class="editor-label">
+                @Html.LabelFor(x=> x.Destination)
+            </div>
+
+            <div class="editor-field">
+            @Html.TextBoxFor(x=> x.Destination)
+            </div>
+
+            <div class="editor-label">
+                @Html.Label("My Name")
+            </div>
+
+            <div class="editor-field">
+                @Html.TextBoxFor(x => x.MyName)
+            </div>
+
+            <div class="editor-label">
+                @Html.Label("My Phone")
+            </div>
+
+            <div class="editor-field">
+                @Html.TextBoxFor(x => x.MyPhone)
+            </div>
+
+            <div class="editor-label">
+                @Html.Label("Start Date")
+            </div>
+
+            <div class="editor-field">
+                <input type="date" name="Begin">
+            </div>
+
+            <div class="editor-label">
+                @Html.Label("End Date")
+            </div>
+
+            <div class="editor-field">
+                <input type="date" name="End">
+            </div>
+
+
+            <div class="editor-label">
+                @Html.Label("Description")
+            </div>
+
+            <div class="editor-field">
+                @Html.TextAreaFor(x=> x.Description)
+            </div>
+
+            <input type="submit" value="Invite Friends" class="btn btn-primary" style="margin-top:20px" />
+
+        </form>
+
     </div>
 </body>
 </html>

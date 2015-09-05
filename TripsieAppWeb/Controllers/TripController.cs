@@ -21,6 +21,7 @@ namespace TripsieAppWeb.Controllers
 
             if (code != null)
             {
+                ViewBag.TripCode = id;
                 return View("TripDetail", code);
             }
 
@@ -36,12 +37,14 @@ namespace TripsieAppWeb.Controllers
         {
             TripAppEntities entities = new TripAppEntities();
 
+            ViewBag.TripCode = id;
             return View(entities.TripUsers.First(r => r.TripCode == id));
         }
 
         public ActionResult UploadPicture(string id)
         {
             ViewBag.UserId = id;
+            ViewBag.TripCode = id;
 
             return View(new UploadImageFile { TripUserId = id });
         }
@@ -56,6 +59,7 @@ namespace TripsieAppWeb.Controllers
 
             ViewBag.UserId = id;
 
+            ViewBag.TripCode = id;
 
             return View(pictures);
         }
@@ -66,7 +70,7 @@ namespace TripsieAppWeb.Controllers
 
             var trip = entities.TripUsers.Where(r => r.TripCode == id).FirstOrDefault().Trip;
 
-
+            ViewBag.TripCode = id;
             return View();
         }
 
@@ -79,7 +83,7 @@ namespace TripsieAppWeb.Controllers
             ViewBag.Comments = entities.TripComments.Where(r => r.TripActivityId != null && r.TripActivityId == id).OrderByDescending(r=> r.Date).ToList();
             ViewBag.createdBy = entities.TripUsers.FirstOrDefault(r=> r.Id == activity.TripUserId);
             ViewBag.TripUser = entities.TripUsers.FirstOrDefault(r=> r.TripCode == code);
-
+            ViewBag.TripCode = id;
             return View(activity);
         }
 
@@ -91,7 +95,7 @@ namespace TripsieAppWeb.Controllers
 
             ViewBag.Destination = tripUser.Trip.Destination;
             ViewBag.TripUser = tripUser;
-
+            ViewBag.TripCode = id;
             return View("Comments", entities.TripComments.Where(r=> r.TripUser.TripId == tripUser.TripId && r.TripActivityId == 0).OrderByDescending(r=> r.Date).ToList());
         }
 
@@ -187,6 +191,7 @@ namespace TripsieAppWeb.Controllers
 
         public ActionResult PicturesMap(string id)
         {
+            ViewBag.TripCode = id;
             return View();
         }
 
