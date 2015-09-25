@@ -122,8 +122,6 @@
     <Content Include="Content\Images\bg1.jpg" />
     <Content Include="Content\Images\bg2.jpg" />
     <Content Include="Content\Images\bg3.jpg" />
-    <Content Include="Content\Images\bg4.jpg" />
-    <Content Include="Content\Images\bg5.jpg" />
     <Content Include="Content\Images\indicator.gif" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\no.png" />

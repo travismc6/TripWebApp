@@ -11,9 +11,21 @@
     <meta name="viewport" content="width=device-width" />
     <title>InviteFriends</title>
 </head>
+
+<style>
+    td {
+        padding: 5px;
+    }
+
+    .friendRow
+    {
+                font-size:16px;
+    }
+} 
+</style>
+
 <body>
     <div>
-
         <h3>Invite Friends to @Model.Destination -  Step 2</h3>
 
         <form method="post" action="InviteFriendsAction">
@@ -25,11 +37,128 @@
             @Html.HiddenFor(x => x.TripUsers)
             @Html.HiddenFor(x => x.MyName)
 
+
+            <div>
+                <table >
+                    <tr>
+                        <td >
+                            <label>Name</label>
+                        </td>
+
+                        <td >
+                            <input id="FriendName" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td >
+                            <label>Phone</label>
+                        </td>
+
+                        <td >
+                            <input id="FriendPhone" />
+                        </td>
+                    </tr>
+
+                    @*<tr>
+                        <td style="padding:5px">
+                            <label>Email</label>
+                        </td>
+
+                        <td style="padding:5px">
+                            <input id="Friend Email" />
+                        </td>
+                    </tr>*@
+
+                    <tr >
+                        <td></td>
+                        <td style="padding:5px">
+                            <button type="button" id="AddFriendButton" >Add Friend </button>
+                        </td>
+                    </tr>
+                </table>
+
+                <p style="margin-top:10px">
+
+                </p>
+
+
+                <h4 style="margin-top:25px">Invitees</h4>
+
+            </div>
+
+            <table style="margin-top:15px" id="FriendsTable">
+
+                @*<tr>
+                    <td>Travis</td>
+                    <td>6148067266</td>
+                    <td>X</td>
+                </tr>*@
+
+            </table>
+
+
             <input type="submit" value="Create Trip" class="btn btn-primary" style="margin-top:20px" />
 
          </form>
-
-        
      </div>
+
+    <script src="~/scripts/jquery-2.1.4.min.js" type="text/javascript"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $('#AddFriendButton').click(function () {
+                var friendName = $('#FriendName').val();
+                var friendPhone = $('#FriendPhone').val();
+
+                var table = $('#FriendsTable');
+
+                if(friendName.length == 0)
+                {
+                    alert('Please enter a friend name');
+                    return;
+                }
+
+                if(friendPhone.length < 10)
+                {
+                    alert('Please enter valid phone number');
+                    return;
+                }
+
+                var rows = table.children('tr').length;
+                
+                var noImage = $('<img src="/Content/Images/no.png">');
+                noImage.attr('id', rows - 1);
+                noImage.height("22px");
+
+                alert(noImage.id);
+
+                // add to a list
+
+                var $row = $('<tr></tr>');
+                $row.append( $('<td class=\"friendRow\"></td>').text(friendName));
+                $row.append($('<td class=\"friendRow\"></td>').text(friendPhone));
+
+                $row.append($('<td></td>').append(noImage));
+
+                $('#FriendName').val('');
+                $('#FriendPhone').val('');
+
+                table.append($row);
+
+                noImage.click(function ()
+                {
+
+
+                    alert(rows);
+                    }
+                );
+
+            });
+        });
+
+
+    </script>
 </body>
 </html>
