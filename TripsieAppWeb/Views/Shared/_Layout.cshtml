@@ -11,25 +11,23 @@
 <body id="content-div" >
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="navbar-header">
-            
+            <div class="navbar-header">            
                 @Html.ActionLink("Tripsie", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-
             </div>
         </div>
     </div>
 
     <div>
-
-
         <div class="container body-content">
             @RenderBody()
             <hr />
-            <footer style="{display:inline">
+            <footer style="display:inline">
                 <p>
                     &copy; @DateTime.Now.Year -
                     <a href="www.teambitewolf.com">BiteWolf Inc</a>.
                 </p>
+
+                <label id="imageNumber"></label>
 
             </footer>
         </div>
@@ -41,7 +39,7 @@
     <script>
         $(function () {
 
-            var bgId = Math.floor(Math.random() * 4) +1;
+            var bgId = Math.floor(Math.random() * 3) + 1;
 
             $('#content-div').css("background-image", "url(/Content/Images/bg" + bgId + ".jpg)").css("background-repeat", "no-repeat").css("background-height", "100%").css("background-width", "100%");
         });

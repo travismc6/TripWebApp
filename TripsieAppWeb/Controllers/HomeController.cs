@@ -40,27 +40,36 @@ namespace TripsieAppWeb.Controllers
         [HttpPost]
         public ViewResult CreateTripAction(CreateTrip createTrip)
         {
-            Trip trip = new Trip
+            if (ModelState.IsValid)
             {
-                Description = createTrip.Description,
-                Destination = createTrip.Destination,
-                StartDate = createTrip.Begin.Date.ToString(),
-                EndDate = createTrip.End.Date.ToString(),
-                MyName = createTrip.MyName
-            };
+                Trip trip = new Trip
+                {
+                    Description = createTrip.Description,
+                    Destination = createTrip.Destination,
+                    StartDate = createTrip.Begin.Date.ToString(),
+                    EndDate = createTrip.End.Date.ToString(),
+                    MyName = createTrip.MyName
+                };
 
-            trip.TripUsers = new List<TripUser>();
+                trip.TripUsers = new List<TripUser>();
 
-            TripUser userMe = new TripUser
+                TripUser userMe = new TripUser
+                {
+                    DisplayName = createTrip.MyName,
+                    Phone = createTrip.MyPhone
+                };
+
+                trip.TripUsers.Add(userMe);
+
+
+                return View("InviteFriends", trip);
+            }
+
+            else
             {
-                DisplayName = createTrip.MyName,
-                Phone = createTrip.MyPhone
-            };
-
-            trip.TripUsers.Add(userMe);
-
-
-            return View("InviteFriends", trip);
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                return View("CreateTrip", createTrip);
+            }
         }
 
         public ViewResult InviteFriends(Trip trip)
