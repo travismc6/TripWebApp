@@ -9,7 +9,7 @@
 </head>
 <body>
     <div>
-        <h3>Create a New Trip -  Step 1</h3>
+        <h3>Create a New Trip - Step 1</h3>
 
         <form method="post" action="CreateTripAction">
             <div class="editor-label">
@@ -17,7 +17,8 @@
             </div>
 
             <div class="editor-field">
-            @Html.TextBoxFor(x=> x.Destination)
+                @Html.TextBoxFor(x=> x.Destination)
+                @Html.ValidationMessageFor(m => m.Destination)
             </div>
 
             <div class="editor-label">
@@ -26,6 +27,7 @@
 
             <div class="editor-field">
                 @Html.TextBoxFor(x => x.MyName)
+                @Html.ValidationMessageFor(m => m.MyName)
             </div>
 
             <div class="editor-label">
@@ -34,6 +36,7 @@
 
             <div class="editor-field">
                 @Html.TextBoxFor(x => x.MyPhone)
+                @Html.ValidationMessageFor(m => m.MyPhone)
             </div>
 
             <div class="editor-label">
@@ -42,6 +45,7 @@
 
             <div class="editor-field">
                 <input type="date" name="Begin">
+                @Html.ValidationMessageFor(m => m.Begin)
             </div>
 
             <div class="editor-label">
@@ -50,6 +54,7 @@
 
             <div class="editor-field">
                 <input type="date" name="End">
+                @Html.ValidationMessageFor(m => m.End)
             </div>
 
 

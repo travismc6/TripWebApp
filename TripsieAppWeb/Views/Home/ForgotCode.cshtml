@@ -10,12 +10,11 @@
         No problem! Enter your phone number and we'll resent it to you.
     </p>
 
-
     @Html.Hidden("RedirectTo", Url.Action("Index", "Home"))
 
-    <p>Phone number: @Html.TextBox("PhoneTextBox") </p>
+    <p><b>Phone number:</b> @Html.TextBox("PhoneTextBox") </p>
 
-    <button id="SubmitButton" type="button">Submit</button>
+    <button id="SubmitButton" type="button" class="btn btn-primary">Submit</button>
 
 
     <script src="~/scripts/jquery-2.1.4.min.js" type="text/javascript"></script>
@@ -36,8 +35,6 @@
                     url: myUrl,
                     type: 'GET',
                     success: function (data) {
-
-
                     },
 
                     error: function (x, y, z) {
@@ -45,12 +42,8 @@
 
                     complete: function () {
                         window.location.href = "/Home";
-
                     }
                 });
-
-
-
             });
         });
 
