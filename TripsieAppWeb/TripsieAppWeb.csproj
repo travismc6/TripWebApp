@@ -118,7 +118,10 @@
       <DependentUpon>TripApp.mdf</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\beach.jpg" />
+    <Content Include="Content\Images\bg1.jpg" />
+    <Content Include="Content\Images\bg2.jpg" />
+    <Content Include="Content\Images\bg3.jpg" />
     <Content Include="Content\Images\indicator.gif" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\no.png" />
@@ -179,6 +182,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Contact.cs" />
+    <Compile Include="Models\CreateTrip.cs" />
     <Compile Include="Models\SecretCode.cs" />
     <Compile Include="Models\UploadImageFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -224,7 +229,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Properties\PublishProfiles\TripsieAppWeb.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_Layout-Trip.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\ForgotCode.cshtml" />
     <Content Include="Views\Trip\Pictures.cshtml" />
@@ -232,6 +237,8 @@
     <Content Include="Views\Trip\ActivityDetails.cshtml" />
     <Content Include="Views\Trip\UploadPicture.cshtml" />
     <Content Include="PicturesMap.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\InviteFriends.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

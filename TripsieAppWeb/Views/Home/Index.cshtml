@@ -1,25 +1,30 @@
 ﻿
 @{
     ViewBag.Title = "Welcome to Tripsie!";
-    //Layout = null;
 }
 
 <html>
     <body>
         <h2>Welcome to Tripsie!</h2>
 
-        <div style="display:block;margin-bottom:15px">
-            @Html.ActionLink("Create Trip", "CreateTrip")
-        </div>
+        <p>
+            <h4>
+               Use Tripsie to create your next big meetup! Invite your friends using email or phone. Once a trip is created, you can collaborate with your friends, vote on trip activities, upload pictures and more. Let's Tripsie!
+            </h4>
+        </p>
 
 
-        <div style="display:block;margin-bottom:15px">
-            @Html.ActionLink("Enter Code", "EnterCode", "Home")
-        </div>
+        <p>
+            <a href="Home/CreateTrip" class="btn btn-primary" role="button" style="min-width:300px">Create Trip</a>
+        </p>
 
-        <div style="display:block;margin-bottom:15px">
-            @Html.ActionLink("Forgot your code?", "ForgotCode", "Home")
-        </div>
+        <p>
+            <a href="Home/EnterCode" class="btn btn-primary" role="button" style="min-width:300px"> Enter Code</a>
+        </p>
+
+        <p>
+            <a href="Home/ForgotCode" class="btn btn-primary" role="button" style="min-width:300px">Forgot your code?</a>
+        </p>
 
     </body>
 </html>

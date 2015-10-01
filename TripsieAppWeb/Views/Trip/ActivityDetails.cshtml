@@ -1,7 +1,7 @@
 ﻿@model TripsieAppWeb.TripActivity
 
 @{
-    
+    Layout = "~/Views/Shared/_Layout-Trip.cshtml";   
 }
 
 <!DOCTYPE html>
@@ -17,14 +17,6 @@
     @Html.Hidden("TripUserId", (int)@ViewBag.TripUser.Id)
     @Html.Hidden("MyName", (string)@ViewBag.TripUser.DisplayName)
 
-    <p>
-        <div>
-            @Html.ActionLink("Trip Home", "Detail", "Trip", new { @id = @ViewBag.TripUser.TripCode }, new { style = "margin-right:10px" })
-            @Html.ActionLink("Activities", "Activities", "Trip", new { @id = @ViewBag.TripUser.TripCode }, new { style = "margin-right:10px" })
-            @Html.ActionLink("Comments", "Comments", "Trip", new { @id = @ViewBag.TripUser.TripCode }, new { style = "margin-right:10px" })
-            @Html.ActionLink("Pictures", "Pictures", "Trip", new { @id = @ViewBag.TripUser.TripCode }, new { style = "margin-right:10px" })
-        </div>
-    </p>
 
     <div>
         <h2>@Model.Activity</h2>
